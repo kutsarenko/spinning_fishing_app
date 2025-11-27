@@ -4,18 +4,14 @@ import 'package:spinning_fishing_app/features/geo/data/geo_service.dart';
 import 'package:spinning_fishing_app/features/geo/domain/repositories/geo_repository.dart';
 import 'package:spinning_fishing_app/features/main/main_screen.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class App extends StatefulWidget {
+  const App({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<App> createState() => _AppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _AppState extends State<App> {
   late GeoService geoService;
   late GeoRepository geoRepository;
   @override
