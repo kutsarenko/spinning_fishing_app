@@ -4,19 +4,22 @@ enum WeatherPrecipitationType { rain, snow, none }
 
 class WeatherModel extends Equatable {
   final double temperature;
-  final double pressure;
-  final WeatherPrecipitationType precipitationType;
-  final String windDirection;
+  final int pressure;
   final double windSpeed;
 
-  const WeatherModel({
-    required this.temperature,
-    required this.pressure,
-    required this.precipitationType,
-    required this.windDirection,
-    required this.windSpeed,
-  });
+  const WeatherModel({required this.temperature, required this.pressure, required this.windSpeed});
+
+  factory WeatherModel._fromJson(Map<String, dynamic> json) {
+    return WeatherModel(
+      temperature: json['main']['temp'] as double,
+      pressure: json['main']['pressure'] as int,
+      windSpeed: json['wind']['speed'],
+    );
+  }
+
+  static List<WeatherModel> fromJsonList(List<dynamic> jsonList) =>
+      jsonList.map((json) => WeatherModel._fromJson(json as Map<String, dynamic>)).toList();
 
   @override
-  List<Object?> get props => [temperature, pressure, precipitationType, windDirection, windSpeed];
+  List<Object?> get props => [temperature, pressure, windSpeed];
 }
