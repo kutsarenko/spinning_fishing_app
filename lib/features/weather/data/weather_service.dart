@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:spinning_fishing_app/core/http_client.dart';
+import 'package:spinning_fishing_app/core/http_client/http_client.dart';
 import 'package:spinning_fishing_app/features/weather/data/models/weather_dto.dart';
 import 'package:spinning_fishing_app/features/weather/data/models/weather_model.dart';
 

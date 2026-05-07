@@ -14,11 +14,12 @@ final class StartPageLoadingState extends StartPageState {}
 final class StartPageSuccessState extends StartPageState {
   final GeoModel geo;
   final WeatherModel weather;
+  final AIResponseModel fishingAdvice;
 
-  const StartPageSuccessState({required this.geo, required this.weather});
+  const StartPageSuccessState({required this.geo, required this.weather, required this.fishingAdvice});
 
   @override
-  List<Object> get props => [...super.props, geo, weather];
+  List<Object> get props => [...super.props, geo, weather, fishingAdvice];
 }
 
 final class StartPageErrorState extends StartPageState {

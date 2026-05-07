@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spinning_fishing_app/core/api_consts.dart';
-import 'package:spinning_fishing_app/core/http_client.dart';
+import 'package:spinning_fishing_app/consts/api_consts.dart';
+import 'package:spinning_fishing_app/core/http_client/ai_token_interceptor.dart';
+import 'package:spinning_fishing_app/core/http_client/http_client.dart';
+import 'package:spinning_fishing_app/features/ai_assistant/data/ai_assistant_service.dart';
+import 'package:spinning_fishing_app/features/ai_assistant/domain/ai_assistant_repository.dart';
 import 'package:spinning_fishing_app/features/geo/data/geo_service.dart';
 import 'package:spinning_fishing_app/features/geo/domain/repositories/geo_repository.dart';
 import 'package:spinning_fishing_app/features/start_page/start_page.dart';
@@ -20,6 +23,8 @@ class _AppState extends State<App> {
   late GeoRepository _geoRepository;
   late WeatherService _weatherService;
   late WeatherRepository _weatherRepository;
+  late AIAssistantService _aiAssistantService;
+  late AIAssistantRepository _aiAssistantRepository;
 
   @override
   void initState() {
@@ -28,6 +33,8 @@ class _AppState extends State<App> {
     _geoRepository = GeoRepositoryImpl(geoService: _geoService);
     _weatherService = WeatherServiceImpl(DioClient(APIConsts.weatherAPI));
     _weatherRepository = WeatherRepositoryImpl(_weatherService);
+    _aiAssistantService = AIAssistantServiceImpl(DioClient(APIConsts.openAIAPI, interceptor: AITokenInterceptor()));
+    _aiAssistantRepository = AIAssistantRepositoryImpl(_aiAssistantService);
   }
 
   @override
@@ -36,6 +43,7 @@ class _AppState extends State<App> {
       providers: [
         RepositoryProvider(create: (context) => _geoRepository),
         RepositoryProvider(create: (context) => _weatherRepository),
+        RepositoryProvider(create: (context) => _aiAssistantRepository),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
