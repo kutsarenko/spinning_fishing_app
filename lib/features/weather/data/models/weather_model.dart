@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 enum WeatherPrecipitationType { rain, snow, none }
 
+@immutable
 class WeatherModel extends Equatable {
   final double temperature;
   final int pressure;

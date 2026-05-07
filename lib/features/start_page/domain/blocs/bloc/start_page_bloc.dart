@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spinning_fishing_app/features/ai_assistant/data/models/ai_request_dto.dart';
+import 'package:spinning_fishing_app/features/ai_assistant/data/models/ai_response_model.dart';
+import 'package:spinning_fishing_app/features/ai_assistant/domain/ai_assistant_repository.dart';
 import 'package:spinning_fishing_app/features/geo/data/models/geo_model.dart';
 import 'package:spinning_fishing_app/features/geo/domain/repositories/geo_repository.dart';
 import 'package:spinning_fishing_app/features/weather/data/models/weather_model.dart';
@@ -11,10 +14,15 @@ part 'start_page_state.dart';
 class StartPageBloc extends Bloc<StartPageEvent, StartPageState> {
   final GeoRepository _geoRepository;
   final WeatherRepository _weatherRepository;
-  StartPageBloc({required GeoRepository geoRepository, required WeatherRepository weatherRepository})
-    : _geoRepository = geoRepository,
-      _weatherRepository = weatherRepository,
-      super(StartPageInitialState()) {
+  final AIAssistantRepository _aiAssistantRepository;
+  StartPageBloc({
+    required GeoRepository geoRepository,
+    required WeatherRepository weatherRepository,
+    required AIAssistantRepository aiAssistantRepository,
+  }) : _geoRepository = geoRepository,
+       _weatherRepository = weatherRepository,
+       _aiAssistantRepository = aiAssistantRepository,
+       super(StartPageInitialState()) {
     on<FetchData>(_fetchData);
   }
 
@@ -23,7 +31,9 @@ class StartPageBloc extends Bloc<StartPageEvent, StartPageState> {
     try {
       final GeoModel geo = await _geoRepository.getUserGeo();
       final WeatherModel weather = await _weatherRepository.getTodayWeather(geo.lat, geo.lon);
-      emit(StartPageSuccessState(geo: geo, weather: weather));
+      final AIRequestDTO aiRequestDTO = AIRequestDTO(geo: geo, weather: weather);
+      final AIResponseModel fishingAdvice = await _aiAssistantRepository.getFishingAdvice(aiRequestDTO);
+      emit(StartPageSuccessState(geo: geo, weather: weather, fishingAdvice: fishingAdvice));
     } catch (e) {
       emit(StartPageErrorState(e.toString()));
     }

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 
+@immutable
 class GeoModel extends Equatable {
   final double lat;
   final double lon;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spinning_fishing_app/features/ai_assistant/data/models/ai_response_model.dart';
+import 'package:spinning_fishing_app/features/ai_assistant/domain/ai_assistant_repository.dart';
 import 'package:spinning_fishing_app/features/geo/data/models/geo_model.dart';
 import 'package:spinning_fishing_app/features/geo/domain/repositories/geo_repository.dart';
 import 'package:spinning_fishing_app/features/start_page/domain/blocs/bloc/start_page_bloc.dart';
@@ -15,6 +17,7 @@ class StartPage extends StatelessWidget {
       create: (context) => StartPageBloc(
         geoRepository: context.read<GeoRepository>(),
         weatherRepository: context.read<WeatherRepository>(),
+        aiAssistantRepository: context.read<AIAssistantRepository>(),
       ),
       child: const _StartPageView(),
     );
@@ -52,8 +55,16 @@ class _StartPageViewState extends State<_StartPageView> {
                   case StartPageSuccessState():
                     final GeoModel geoModel = state.geo;
                     final WeatherModel weatherModel = state.weather;
-                    return Text(
-                      'lat: ${geoModel.lat}, lon: ${geoModel.lon}\ntemp: ${weatherModel.temperature}, pressure: ${weatherModel.pressure}, wind speed: ${weatherModel.windSpeed}',
+                    final AIResponseModel fishingAdvice = state.fishingAdvice;
+                    return Column(
+                      children: [
+                        Text(
+                          'lat: ${geoModel.lat}, lon: ${geoModel.lon}\ntemp: ${weatherModel.temperature}, pressure: ${weatherModel.pressure}, wind speed: ${weatherModel.windSpeed}',
+                        ),
+                        Text(
+                          'Совет по ловле:\n- рекомендованные приманки: ${fishingAdvice.recommendedLures}\n- активность: ${fishingAdvice.activityLevel}\n- совет: ${fishingAdvice.fishindAdvice}',
+                        ),
+                      ],
                     );
                 }
               },
