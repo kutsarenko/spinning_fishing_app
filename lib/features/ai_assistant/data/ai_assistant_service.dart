@@ -24,6 +24,9 @@ class AIAssistantServiceImpl implements AIAssistantService {
       );
 
       return AIResponseModel.fromGemini(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('DATA: ${e.response?.data}');
+      rethrow;
     } catch (e, stackTrace) {
       debugPrint('Getting fishing advice error: $e\n$stackTrace');
       rethrow;
